@@ -1,0 +1,7 @@
+#! /bin/sh
+# Starts bot
+#
+
+cd ~/homebot
+git pull
+python3 bot.py
