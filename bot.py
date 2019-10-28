@@ -6,7 +6,16 @@ from subprocess import call
 TOKEN = "REDACTED_TOKEN"
 channel_id = REDACTED_ID
 client = discord.Client()
-op_code_map = {"0": call("sudo shutdown -h now", shell=True)}
+
+
+async def shutdown(op_code):
+    call("sudo shutdown -h now", shell=True)
+
+
+async def message(op_code):
+    await client.get_channel(channel_id).send(message_map[int(op_code)])
+
+op_code_map = {"0": shutdown}
 message_map = ["", "Eten is klaar", "test"]
 
 
@@ -15,7 +24,7 @@ async def send_message():
     while not client.is_closed():
         op_code = await aioconsole.ainput()
         op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
-        op_code_map.get(op_code, await client.get_channel(channel_id).send(message_map[int(op_code)]))
+        await op_code_map.get(op_code, message)()
 
 
 @client.event
