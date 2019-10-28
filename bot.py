@@ -16,7 +16,7 @@ async def shutdown(op_code):
 
 
 async def message(op_code):
-    message = message_map[int(op_code[0])]
+    message = "@everyone " + message_map[int(op_code[0])]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
     await client.get_channel(channel_id).send(message)
