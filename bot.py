@@ -16,13 +16,14 @@ async def shutdown(op_code):
 
 
 async def message(op_code):
-    message = "@everyone " + message_map[int(op_code[0])]
+    message = message_map[int(op_code[0])]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
     await client.get_channel(channel_id).send(message)
 
 op_code_map = {"0": shutdown}
-message_map = ["", "Het eten is klaar", "We vertrekken", "", "Komen jullie eens naar beneden?",
+message_map = ["", "@everyone, het eten is klaar", "@everyone, we vertrekken", "",
+               "@everyone, komen jullie eens naar beneden?",
                "%s, kom eens naar beneden" % user1_id, "%s, kom eens naar beneden" % user2_id]
 
 
