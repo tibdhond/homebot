@@ -24,7 +24,7 @@ async def send_message():
     while not client.is_closed():
         op_code = await aioconsole.ainput()
         op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
-        await op_code_map.get(op_code, message)()
+        await op_code_map.get(op_code, message)(op_code)
 
 
 @client.event
