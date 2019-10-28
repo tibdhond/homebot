@@ -7,16 +7,23 @@ TOKEN = "REDACTED_TOKEN"
 channel_id = REDACTED_ID
 client = discord.Client()
 
+user1_id = '<@REDACTED_ID>'
+user2_id = '<@REDACTED_ID>'
+
 
 async def shutdown(op_code):
     call("sudo shutdown -h now", shell=True)
 
 
 async def message(op_code):
-    await client.get_channel(channel_id).send(message_map[int(op_code)])
+    message = message_map[int(op_code[0])]
+    if len(op_code) > 1:
+        message += " binnen " + op_code[1:] + " minuten"
+    await client.get_channel(channel_id).send(message)
 
 op_code_map = {"0": shutdown}
-message_map = ["", "Eten is klaar", "test"]
+message_map = ["", "Het eten is klaar", "We vertrekken", "", "Komen jullie eens naar beneden?",
+               "%s, kom eens naar beneden" % user1_id, "%s, kom eens naar beneden" % user2_id]
 
 
 async def send_message():
