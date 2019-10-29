@@ -1,6 +1,7 @@
 import asyncio
 import aioconsole
 import discord
+import math
 from subprocess import call
 
 TOKEN = "REDACTED_TOKEN"
@@ -15,16 +16,15 @@ async def shutdown(op_code):
     call("sudo shutdown -h now", shell=True)
 
 
-async def message(op_code):
-    message = message_map[int(op_code[0])]
+async def message_decode(op_code):
+    message = mention_map[int(op_code[0]) % 3] + ", " + message_map[math.ceil(int(op_code[0]) / 3)]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
     await client.get_channel(channel_id).send(message)
 
 op_code_map = {"0": shutdown}
-message_map = ["", "@everyone, het eten is klaar", "@everyone, we vertrekken", "",
-               "@everyone, komen jullie eens naar beneden?",
-               "%s, kom eens naar beneden" % user1_id, "%s, kom eens naar beneden" % user2_id]
+mention_map = ["%s" % user2_id, "@everyone", "%s" % user1_id]
+message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"]
 
 
 async def send_message():
@@ -32,7 +32,7 @@ async def send_message():
     while not client.is_closed():
         op_code = await aioconsole.ainput()
         op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
-        await op_code_map.get(op_code, message)(op_code)
+        await op_code_map.get(op_code, message_decode)(op_code)
 
 
 @client.event
