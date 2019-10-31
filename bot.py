@@ -75,7 +75,7 @@ async def send_message():
             op_code_sanitized = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
             if op_code_sanitized == "":
                 op_code = op_code_sanitized
-            await op_code_map.get(op_code, message_decode)(op_code)
+            await op_code_map.get(op_code, message_decode)(op_code_sanitized)
         except:
             f = open("error.log", 'a+')
             f.write("%s\n" % d.now())
