@@ -14,7 +14,7 @@ client = discord.Client()
 
 user1_id = 'REDACTED_ID'
 user2_id = 'REDACTED_ID'
-numlock = 0
+numlock = -1
 
 
 def blink_once():
@@ -34,17 +34,19 @@ async def reboot(_):
 
 async def reset_blink(_):
     global numlock
-    numlock = 0
+    numlock = -1
     call("numlockx on", shell=True)
 
 
 async def message_decode(op_code):
+    global numlock
     op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
     message = mention_map[int(op_code[0]) % 3] + ", " + message_map[math.ceil(int(op_code[0]) / 3)]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
     await client.get_channel(channel_id).send(message)
     call("numlockx off", shell=True)
+    numlock = 0
 
 op_code_map = {"0": shutdown, "0+": reboot, "": reset_blink}
 mention_map = ["@everyone", "<@%s>" % user1_id, "<@%s>" % user2_id]
@@ -54,22 +56,22 @@ message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"
 @client.event
 async def on_message(d_message):
     global numlock
-    print(d_message.author.id)
-    print(user1_id)
-    print(d_message.author.id == user1_id)
-    if str(d_message.author.id) == user1_id:
-        numlock = numlock | 1
-        print(numlock)
-    elif str(d_message.author.id) == user2_id:
-        numlock = numlock | 2
+    if numlock >= 0:
+        if str(d_message.author.id) == user1_id:
+            numlock = numlock | 1
+        elif str(d_message.author.id) == user2_id:
+            numlock = numlock | 2
 
 
 async def send_message():
+    global numlock
     op_code = ''
     await client.wait_until_ready()
     while not client.is_closed():
         try:
             op_code = await aioconsole.ainput()
+            if numlock > -1:
+                op_code = ""
             op_code = op_code[max(0, op_code.rfind('.')+1):]
             await op_code_map.get(op_code, message_decode)(op_code)
         except:
