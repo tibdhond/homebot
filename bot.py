@@ -1,6 +1,7 @@
 import asyncio
 import aioconsole
 import discord
+import math
 from subprocess import call
 import sys
 from datetime import datetime as d
@@ -18,20 +19,18 @@ async def shutdown(_):
 
 
 async def reboot(_):
-    print("Rebooting")
-    # call("sudo reboot", shell=True)
+    call("sudo reboot", shell=True)
 
 
-async def message_construct(op_code):
-    message = message_map[int(op_code[0])]
+async def message_decode(op_code):
+    message = mention_map[int(op_code[0]) % 3] + ", " + message_map[math.ceil(int(op_code[0]) / 3)]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
     await client.get_channel(channel_id).send(message)
 
 op_code_map = {"0": shutdown, "0+": reboot}
-message_map = ["", "@everyone, het eten is klaar", "@everyone, we vertrekken", "",
-               "@everyone, komen jullie eens naar beneden?",
-               "%s, kom eens naar beneden" % user1_id, "%s, kom eens naar beneden" % user2_id]
+mention_map = ["%s" % user2_id, "@everyone", "%s" % user1_id]
+message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"]
 
 
 async def send_message():
@@ -41,7 +40,7 @@ async def send_message():
         try:
             op_code = await aioconsole.ainput()
             op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
-            await op_code_map.get(op_code, message_construct)(op_code)
+            await op_code_map.get(op_code, message_decode)(op_code)
         except:
             f = open("error.log", 'a+')
             f.write("%s\n" % d.now())
