@@ -58,10 +58,10 @@ async def on_message(d_message):
     print(user1_id)
     print(d_message.author.id == user1_id)
     if str(d_message.author.id) == user1_id:
-        numlock += 1
+        numlock = numlock | 1
         print(numlock)
     elif str(d_message.author.id) == user2_id:
-        numlock += 2
+        numlock = numlock | 2
 
 
 async def send_message():
