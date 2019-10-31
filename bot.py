@@ -23,6 +23,7 @@ async def reboot(_):
 
 
 async def message_decode(op_code):
+    op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
     message = mention_map[int(op_code[0]) % 3] + ", " + message_map[math.ceil(int(op_code[0]) / 3)]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
@@ -39,7 +40,6 @@ async def send_message():
     while not client.is_closed():
         try:
             op_code = await aioconsole.ainput()
-            op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
             await op_code_map.get(op_code, message_decode)(op_code)
         except:
             f = open("error.log", 'a+')
