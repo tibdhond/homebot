@@ -12,8 +12,8 @@ TOKEN = "REDACTED_TOKEN"
 channel_id = REDACTED_ID     # Testing
 client = discord.Client()
 
-user1_id = '<@REDACTED_ID>'
-user2_id = '<@REDACTED_ID>'
+user1_id = '110REDACTED_ID'
+user2_id = 'REDACTED_ID'
 numlock = 0
 
 
@@ -46,7 +46,7 @@ async def message_decode(op_code):
     call("numlockx off", shell=True)
 
 op_code_map = {"0": shutdown, "0+": reboot, "": reset_blink}
-mention_map = ["@everyone", "%s" % user1_id, "%s" % user2_id]
+mention_map = ["@everyone", "<@%s>" % user1_id, "<@%s>" % user2_id]
 message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"]
 
 
