@@ -37,6 +37,7 @@ message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"
 async def send_message():
     op_code = ''
     await client.wait_until_ready()
+    call("numlockx on", shell=True)
     while not client.is_closed():
         try:
             op_code = await aioconsole.ainput()

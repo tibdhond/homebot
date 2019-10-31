@@ -4,5 +4,4 @@
 
 cd ~/homebot
 git pull
-numlockx on
 python3 bot.py
