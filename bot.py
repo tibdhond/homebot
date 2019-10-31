@@ -7,7 +7,8 @@ import sys
 from datetime import datetime as d
 
 TOKEN = "REDACTED_TOKEN"
-channel_id = REDACTED_ID
+# channel_id = REDACTED_ID   # General
+channel_id = REDACTED_ID     # Testing
 client = discord.Client()
 
 user1_id = '<@REDACTED_ID>'
@@ -37,10 +38,11 @@ message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"
 async def send_message():
     op_code = ''
     await client.wait_until_ready()
-    call("numlockx on", shell=True)
     while not client.is_closed():
         try:
             op_code = await aioconsole.ainput()
+            op_code = op_code[max(0, op_code.rfind('.')+1):]
+            print(op_code)
             await op_code_map.get(op_code, message_decode)(op_code)
         except:
             f = open("error.log", 'a+')
@@ -48,7 +50,6 @@ async def send_message():
             f.write("%s\n" % sys.exc_info()[0])
             f.write("%s\n\n" % ("Op_code: %s" % op_code if op_code != "" else "Op_code is empty"))
             f.close()
-        finally:
             await reboot("")
 
 
@@ -58,7 +59,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('----')
-    # await client.get_channel(channel_id).send("Test", tts=True)
+    call("numlockx on", shell=True)
 
 loop = asyncio.get_event_loop()
 tasks = [client.start(TOKEN), send_message()]
