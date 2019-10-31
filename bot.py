@@ -8,8 +8,8 @@ from datetime import datetime as d
 from time import sleep
 
 TOKEN = "REDACTED_TOKEN"
-# channel_id = REDACTED_ID   # General
-channel_id = REDACTED_ID     # Testing
+channel_id = REDACTED_ID   # General
+# channel_id = REDACTED_ID     # Testing
 client = discord.Client()
 
 user1_id = 'REDACTED_ID'
@@ -40,7 +40,6 @@ async def reset_blink(_):
 
 async def message_decode(op_code):
     global numlock
-    op_code = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
     message = mention_map[int(op_code[0]) % 3] + ", " + message_map[math.ceil(int(op_code[0]) / 3)]
     if len(op_code) > 1:
         message += " binnen " + op_code[1:] + " minuten"
@@ -73,12 +72,15 @@ async def send_message():
             if numlock > -1:
                 op_code = ""
             op_code = op_code[max(0, op_code.rfind('.')+1):]
+            op_code_sanitized = op_code.replace('+', '').replace('-', '').replace('*', '').replace('/', '')
+            if op_code_sanitized == "":
+                op_code = op_code_sanitized
             await op_code_map.get(op_code, message_decode)(op_code)
         except:
             f = open("error.log", 'a+')
             f.write("%s\n" % d.now())
             f.write("%s\n" % sys.exc_info()[0])
-            f.write("%s\n\n" % ("Op_code: %s" % op_code if op_code != "" else "Op_code is empty"))
+            f.write("%s\n\n" % ("Op_code: %s" % op_code if op_code != "" else "Op_code is empty"))p
             f.close()
             await reboot("")
 
