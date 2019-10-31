@@ -12,15 +12,16 @@ TOKEN = "REDACTED_TOKEN"
 channel_id = REDACTED_ID     # Testing
 client = discord.Client()
 
-user1_id = '110REDACTED_ID'
+user1_id = 'REDACTED_ID'
 user2_id = 'REDACTED_ID'
 numlock = 0
 
 
 def blink_once():
     call("numlockx on", shell=True)
-    sleep(0.1)
+    sleep(0.2)
     call("numlockx off", shell=True)
+    sleep(0.1)
 
 
 async def shutdown(_):
@@ -54,9 +55,12 @@ message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"
 async def on_message(d_message):
     global numlock
     print(d_message.author.id)
-    if d_message.author.id == user1_id:
+    print(user1_id)
+    print(d_message.author.id == user1_id)
+    if str(d_message.author.id) == user1_id:
         numlock += 1
-    elif d_message.author.id == user2_id:
+        print(numlock)
+    elif str(d_message.author.id) == user2_id:
         numlock += 2
 
 
@@ -67,7 +71,6 @@ async def send_message():
         try:
             op_code = await aioconsole.ainput()
             op_code = op_code[max(0, op_code.rfind('.')+1):]
-            print(op_code)
             await op_code_map.get(op_code, message_decode)(op_code)
         except:
             f = open("error.log", 'a+')
@@ -79,12 +82,14 @@ async def send_message():
 
 
 async def numlock_feedback():
+    global numlock
     await client.wait_until_ready()
     while not client.is_closed():
         i = 0
         while i < numlock:
             blink_once()
             i += 1
+        sleep(1.5)
         await asyncio.sleep(0.1)
 
 
