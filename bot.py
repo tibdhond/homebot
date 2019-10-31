@@ -45,7 +45,7 @@ async def message_decode(op_code):
     await client.get_channel(channel_id).send(message)
     call("numlockx off", shell=True)
 
-op_code_map = {"0": shutdown, "0+": reboot}
+op_code_map = {"0": shutdown, "0+": reboot "": reset_blink}
 mention_map = ["@everyone", "%s" % user1_id, "%s" % user2_id]
 message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"]
 
@@ -53,6 +53,7 @@ message_map = ["", "het eten is klaar", "we vertrekken", "kom eens naar beneden"
 @client.event
 async def on_message(d_message):
     global numlock
+    print(d_message.author.id)
     if d_message.author.id == user1_id:
         numlock += 1
     elif d_message.author.id == user2_id:

@@ -2,6 +2,7 @@
 # Starts bot
 #
 
+numlockx off
 cd ~/homebot
 git pull
 python3 bot.py
