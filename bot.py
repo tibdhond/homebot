@@ -80,7 +80,7 @@ async def send_message():
             f = open("error.log", 'a+')
             f.write("%s\n" % d.now())
             f.write("%s\n" % sys.exc_info()[0])
-            f.write("%s\n\n" % ("Op_code: %s" % op_code if op_code != "" else "Op_code is empty"))p
+            f.write("%s\n\n" % ("Op_code: %s" % op_code if op_code != "" else "Op_code is empty"))
             f.close()
             await reboot("")
 
