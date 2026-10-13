@@ -6,14 +6,18 @@ from subprocess import call
 import sys
 from datetime import datetime as d
 from time import sleep
+import os
+from dotenv import load_dotenv
 
-TOKEN = "REDACTED_TOKEN"
-channel_id = REDACTED_ID   # General
+load_dotenv()
+
+TOKEN = os.environ["DISCORD_TOKEN"]
+channel_id = os.environ["CHANNEL_ID"]   # General
 # channel_id = REDACTED_ID     # Testing
 client = discord.Client()
 
-user1_id = 'REDACTED_ID'
-user2_id = 'REDACTED_ID'
+user1_id = os.environ["USER1_ID"]
+user2_id = os.environ["USER2_ID"]
 numlock = -1
 
 
